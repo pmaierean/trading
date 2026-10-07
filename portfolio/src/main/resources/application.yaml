@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: portfolio
+logging:
+  level:
+    com.maiereni.util: DEBUG

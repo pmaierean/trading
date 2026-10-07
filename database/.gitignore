@@ -1,0 +1,8 @@
+HELP.md
+.gradle
+.idea
+build/
+results
+sources
+gradle
+*.iml

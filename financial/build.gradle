@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.1.1'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.maiereni.batch.analysis'
+version = '0.0.1-SNAPSHOT'
+description = 'financial'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-data-jpa'
+    implementation 'org.apache.commons:commons-dbcp2'
+    implementation 'org.apache.commons:commons-lang3:3.20.0'
+    implementation 'commons-io:commons-io:2.22.0'
+    implementation('com.opencsv:opencsv:5.12.0') {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    implementation("org.apache.poi:poi-ooxml:5.5.1")
+    implementation("org.postgresql:postgresql:42.7.13")
+    implementation 'am.ik.yfinance4j:yfinance4j:0.1.1'
+    implementation 'org.ta4j:ta4j-core:0.25.0'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompileOnly 'org.projectlombok:lombok'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

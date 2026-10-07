@@ -1,0 +1,81 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.liquibase:liquibase-gradle-plugin:2.2.0"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.liquibase.gradle' version '2.2.0'
+}
+
+group = 'com.maiereni.financial'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+liquibase {
+    activities {
+        main {
+            changelogfile "src/main/resources/changelog.xml"
+            url System.getenv('LIQUIBASE_COMMAND_URL')
+            username System.getenv('LIQUIBASE_COMMAND_USERNAME')
+            password System.getenv('LIQUIBASE_COMMAND_PASSWORD')
+            driver System.getenv('LIQUIBASE_COMMAND_DRIVER')
+            loglevel System.getenv('LIQUIBASE_LOG_LEVEL')
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.slf4j:slf4j-reload4j:2.0.17'
+    implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.24.3'
+    implementation 'commons-io:commons-io:2.18.0'
+    implementation 'commons-beanutils:commons-beanutils:1.10.0'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
+    implementation 'org.apache.commons:commons-dbcp2:2.13.0'
+    implementation 'org.liquibase:liquibase-core:4.31.1'
+    implementation 'org.assertj:assertj-core:3.27.3'
+    runtimeOnly 'org.postgresql:postgresql:42.7.3'
+    liquibaseRuntime 'org.liquibase:liquibase-core:4.31.1'
+    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:4.0.0'
+    liquibaseRuntime 'info.picocli:picocli:4.6.1'
+    liquibaseRuntime('ch.qos.logback:logback-core:1.4.7')
+    liquibaseRuntime 'org.postgresql:postgresql:42.7.5'
+}
+
+apply plugin: 'org.liquibase.gradle'
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.maiereni.financial.Main"
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+task fatJar(type: Jar) {
+    manifest.from jar.manifest
+    archiveBaseName = 'all-in-one-jar'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+    with jar
+}

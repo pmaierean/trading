@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: technical-analysis
+  batch:
+    jdbc:
+      initialize-schema: always
+  datasource:
+    url: jdbc:postgresql://192.168.1.174:5432/petre
+    username: petre
+    password: zG14#23A
+    driver-class-name: org.postgresql.Driver
+    type: org.apache.commons.dbcp2.BasicDataSource
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      "hibernate.dialect": org.hibernate.dialect.PostgreSQLDialect
+  main:
+    web-application-type: none
+    allow-bean-definition-overriding: true
+logging:
+  level:
+    com:
+      maiereni:
+        batch: DEBUG
+    am:
+      ik:
+        yfinance4j: DEBUG
+    org:
+      springframework:
+        web:
+          client:
+            RestClient: DEBUG
+app:
+  source:
+    tsx-master: C:\Users\pmaie\GitHub\trading\financial\sources\tsx-and-amp-tsxv-listed-companies-2026-09-15-en.xlsx

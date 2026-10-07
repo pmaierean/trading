@@ -1,0 +1,22 @@
+services:
+  PostgreSQL:
+    image: postgres:17-alpine
+    container_name: postgresql
+    env_file:
+      - ./Database/.env
+    ports:
+      - 54321:5432
+    restart: always
+  liquidbase:
+    image: pmaierean/financial_liquidbase:0.1.0
+    build:
+      context: database
+      dockerfile: Dockerfile
+    container_name: liquibase
+    env_file:
+      - ./Database/.env
+    depends_on:
+      PostgreSQL:
+        condition: service_started
+    volumes:
+      - ./Database/src/main/resources/:/liquibase/changelog/
